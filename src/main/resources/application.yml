@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: mysql-demo
+  datasource:
+    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
+    url: jdbc:shardingsphere:classpath:shardingsphere.yml
+  #      url: jdbc:mysql://localhost:3306/mysql_demo
+  #      username: root
+  #      password: root
+#  jpa:
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+  flyway:
+    enabled: false
+
+
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+
+#logging:
+#  level:
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql: TRACE
