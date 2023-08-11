@@ -1,12 +1,11 @@
 package com.muyun.mysqldemo.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -26,5 +25,8 @@ public class User {
     private String name;
 
     private String phoneNumber;
+
+    @Column(name = "is_deleted")
+    private boolean deleted;
 
 }

@@ -5,15 +5,88 @@ props:
   sql-show: true
 
 dataSources:
-  ds_1:
+  ds_0:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     jdbcUrl: jdbc:mysql://localhost:3306/mysql_demo
     username: root
     password: root
+  ds_1:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    jdbcUrl: jdbc:mysql://localhost:3306/mysql_demo1
+    username: root
+    password: root
 
-  #mode:
-  #  repository:
-  #    type: JDBC
-  #  type: Standalone
+rules:
+  - !SHARDING
+    tables:
+      user:
+        actualDataNodes: ds_${0..1}.user
+        keyGenerateStrategy:
+          column: id
+          keyGeneratorName: snowflake
+        databaseStrategy:
+          standard:
+            shardingColumn: id
+            shardingAlgorithmName: user_inline
+      t_order:
+        actualDataNodes: ds_${0..1}.t_order_${0..1}
+        tableStrategy:
+          standard:
+            shardingColumn: id
+            shardingAlgorithmName: t_order_inline
+        keyGenerateStrategy:
+          column: id
+          keyGeneratorName: snowflake
+      #        auditStrategy:
+      #          auditorNames:
+      #            - sharding_key_required_auditor
+      #          allowHintDisable: true
+      t_order_item:
+        actualDataNodes: ds_${0..1}.t_order_item_${0..1}
+        tableStrategy:
+          standard:
+            shardingColumn: order_id
+            shardingAlgorithmName: t_order_item_inline
+        keyGenerateStrategy:
+          column: order_item_id
+          keyGeneratorName: snowflake
+
+    # 默认数据库分片策略
+    defaultDatabaseStrategy:
+      standard:
+        shardingColumn: created_by
+        shardingAlgorithmName: database_inline
+
+    shardingAlgorithms:
+      database_inline:
+        type: INLINE
+        props:
+          algorithm-expression: ds_${created_by % 2}
+      user_inline:
+        type: INLINE
+        props:
+          algorithm-expression: ds_${id % 2}
+      t_order_inline:
+        type: INLINE
+        props:
+          algorithm-expression: t_order_${id % 2}
+      t_order_item_inline:
+        type: INLINE
+        props:
+          algorithm-expression: t_order_item_${order_id % 2}
+
+    keyGenerators:
+      snowflake:
+        type: SNOWFLAKE
+    auditors:
+      sharding_key_required_auditor:
+        type: DML_SHARDING_CONDITIONS
+
+
+
+      #mode:
+    #  repository:
+    #    type: JDBC
+    #  type: Standalone
 
 

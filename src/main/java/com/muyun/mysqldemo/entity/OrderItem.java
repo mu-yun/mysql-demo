@@ -2,32 +2,44 @@ package com.muyun.mysqldemo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.Data;
-import org.springframework.data.annotation.CreatedBy;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 
-@Data
+@Getter
+@Setter
 @Entity
-
-public class Log {
+@EntityListeners(AuditingEntityListener.class)
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private String operation;
+    private Long orderId;
+
+    private Long productId;
+
+    private String productName;
+
+    private Integer quantity;
 
     @CreatedDate
     @Column(updatable = false)
     private Instant createdTime;
 
-    @CreatedBy
+    @LastModifiedDate
+    private Instant updatedTime;
+
     private Long createdBy;
 }
