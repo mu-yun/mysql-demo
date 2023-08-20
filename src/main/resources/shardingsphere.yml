@@ -76,7 +76,9 @@ rules:
     bindingTables:
       - t_order,t_order_item
       - t_invoice,t_invoice_item
-      # 默认数据库分片策略
+    broadcastTables:
+      - t_address
+    # 默认数据库分片策略
     defaultDatabaseStrategy:
       standard:
         shardingColumn: created_by
